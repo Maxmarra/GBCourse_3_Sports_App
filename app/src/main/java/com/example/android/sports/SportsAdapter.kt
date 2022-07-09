@@ -10,7 +10,10 @@ import coil.load
 import com.example.android.sports.databinding.SportsListItemBinding
 import com.example.android.sports.model.Sport
 
-class SportsAdapter(private val onItemClicked: (Sport) -> Unit) :
+class SportsAdapter(
+    private val onItemClicked: (Sport) -> Unit,
+    private val onLongItemClicked: (Sport) -> Boolean
+    ) :
     ListAdapter<Sport, SportsAdapter.SportsViewHolder>(DiffCallback) {
 
     private lateinit var context: Context
@@ -40,8 +43,12 @@ class SportsAdapter(private val onItemClicked: (Sport) -> Unit) :
 
     override fun onBindViewHolder(holder: SportsViewHolder, position: Int) {
         val current = getItem(position)
+
         holder.itemView.setOnClickListener {
             onItemClicked(current)
+        }
+        holder.itemView.setOnLongClickListener{
+            onLongItemClicked(current)
         }
         holder.bind(current, context)
     }

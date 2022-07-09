@@ -25,4 +25,6 @@ class SportsViewModel : ViewModel() {
     fun updateCurrentSport(sport: Sport) {
         _currentSport.value = sport
     }
+
+
 }
