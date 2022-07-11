@@ -13,6 +13,11 @@
         diam fringilla tellus, eu euismod mauris neque at neque.</string>
     />
 
+    <string name="titleResourceId">%s</string>
+    <string name="subTitleResourceId">%s</string>
+    <string name="newsTitle">%s</string>
+
+
     <string name="baseball">Baseball</string>
     <string name="badminton">Badminton</string>
     <string name="basketball">Basketball</string>

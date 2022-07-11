@@ -3,6 +3,7 @@ package com.example.android.sports
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.leanback.widget.DiffCallback
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -10,27 +11,37 @@ import coil.load
 import com.example.android.sports.databinding.SportsListItemBinding
 import com.example.android.sports.model.Sport
 
-class SportsAdapter(private val onItemClicked: (Sport) -> Unit) :
+class SportsAdapter(
+    private val shortClickListener: ShortListener,
+    private val longClickListener: LongListener,
+) :
     ListAdapter<Sport, SportsAdapter.SportsViewHolder>(DiffCallback) {
-
-    private lateinit var context: Context
-
+    //private lateinit var context: Context
     class SportsViewHolder(private var binding: SportsListItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(sport: Sport, context:Context) {
-            binding.title.text = context.getString(sport.titleResourceId)
-            binding.subTitle.text = context.getString(sport.subTitleResourceId)
-            // Load the images into the ImageView using the Coil library.
-            binding.sportsImage.load(sport.imageResourceId)
+        fun bind(
+            shortClickListener: ShortListener,
+            longClickListener: LongListener,
+            sport: Sport,
+        ) {
+            binding.sport = sport
+            binding.longClickListner = longClickListener
+            binding.shortClickListner = shortClickListener
+            binding.executePendingBindings()
         }
+//            binding.title.text = context.getString(sport.titleResourceId)
+//            binding.subTitle.text = context.getString(sport.subTitleResourceId)
+//            // Load the images into the ImageView using the Coil library.
+//            binding.sportsImage.load(sport.imageResourceId)
     }
+
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
     ): SportsViewHolder {
-        context = parent.context
+        //context = parent.context
         return SportsViewHolder(
             SportsListItemBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false
@@ -39,11 +50,9 @@ class SportsAdapter(private val onItemClicked: (Sport) -> Unit) :
     }
 
     override fun onBindViewHolder(holder: SportsViewHolder, position: Int) {
-        val current = getItem(position)
-        holder.itemView.setOnClickListener {
-            onItemClicked(current)
-        }
-        holder.bind(current, context)
+        val sport = getItem(position)
+
+        holder.bind(shortClickListener, longClickListener, sport)
     }
 
     companion object {
@@ -61,3 +70,36 @@ class SportsAdapter(private val onItemClicked: (Sport) -> Unit) :
         }
     }
 }
+
+class LongListener(val longClickListener: (sport: Sport) -> Boolean) {
+    fun onLongClick(sport: Sport) = longClickListener(sport)
+}
+
+class ShortListener(val shortClickListener: (sport: Sport) -> Unit) {
+    fun onShortClick(sport: Sport) = shortClickListener(sport)
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
